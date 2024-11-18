@@ -1,12 +1,12 @@
 import axios from 'axios'
 
 const getChannel = (user) => (
-  axios.get(`https://twitch-proxy.freecodecamp.rocks/helix/${user}`)
+  axios.get(`https://twitch-proxy.freecodecamp.rocks/helix/streams?user_login=${user}`)
     .then((user) => user.data)
 );
 
 const getStream = (user) => (
-  axios.get(`https://twitch-proxy.freecodecamp.rocks/helix/${user}` )
+  axios.get(`https://twitch-proxy.freecodecamp.rocks/helix/streams?user_login=${user}` )
     .then((user) => user.data)
 );
 const getChannelsData = (ch) => {
