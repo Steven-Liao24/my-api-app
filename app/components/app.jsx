@@ -1,50 +1,27 @@
-import React from 'react';
-import update from 'react-addons-update';
-import SearchChannel from './SearchChannel';
-import AddChannel from './AddChannel';
-import Channels from './Channels';
+import React, { useState, useCallback } from 'react';
+import AddChannel from './AddChannel'; // 引入 AddChannel 组件
 
-export default class App extends React.Component{
-    constructor(props){
-        super(props);
-        
-        this.state = {
-            twitchChannels: ['freecodecamp','natalie_moore','wr4thtv','koshkamoroshka','esl_sc2','streamerhouse','missrubyfalls','grolldir','sim_dude'],
-            searchChannel:''
-        };
+export default function App() {
+  const [channels, setChannels] = useState([]);
 
-        this.onChangeInput  = this.onChangeInput.bind(this);
-        this.onSubmit       = this.onSubmit.bind(this);
-        this.filterChannel  = this.filterChannel.bind(this);
-    }
+  // 定义 onSubmit 函数
+  const onSubmit = useCallback((channel) => {
+    setChannels((prevChannels) => [...prevChannels, channel]);
+  }, []);
 
-    onChangeInput(e){
-        this.setState({searchChannel:e.target.value})
-    }
-    onSubmit(channel){
-        const newTwitchChannels = update(this.state,{
-            twitchChannels: {
-                $push: [channel]
-            }
-        });
-        this.setState(newTwitchChannels);
-    }
-
-    filterChannel(){
-        const regex = new RegExp(`^${this.state.searchChannel}`, 'gi');
-        return this.state.twitchChannels.filter(channel => channel.match(regex));
-    }
-    render(){
-        return(
-            <div className="container">
-                <div className="row">
-                    <SearchChannel cssClass="col s6" onChange={this.onChangeInput}/>
-                    <AddChannel cssClass="col s6" onSubmit={this.onSubmit}/>
-                </div>
-                <div className="row">
-                    <Channels allChannels={this.filterChannel()}/>
-                </div>
-            </div>
-        )
-    }
-};
+  return (
+    <div>
+      <h1>React 组件结构测试</h1>
+      <p>这是主应用的入口组件</p>
+      {/* 正确传递 onSubmit */}
+      <AddChannel cssClass="col s6" onSubmit={onSubmit} />
+      
+      {/* 这里没有必要重复 AddChannel */}
+      <ul>
+        {channels.map((channel, index) => (
+          <li key={index}>{channel}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
